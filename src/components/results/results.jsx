@@ -1,11 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import MarkedItem from "../markedItem/markedItem";
 import styled from "styled-components";
 
 //STYLED COMPONENTS//
 const ResultsContainer = styled.div`
   position: absolute;
-  width: 100%; // Ancho flexible para mejor adaptabilidad en móviles
+  width: 400px;
   background: white;
   border: solid 1px #222;
   border-top: solid 1px transparent;
@@ -22,38 +22,37 @@ export default function Results({
 }) {
   const [results, setResults] = useState([]);
 
-  // Utilizamos useMemo para optimizar el filtrado
+  // Use memoization to avoid recalculating filtered items unnecessarily
   const filteredItems = useMemo(() => findMatch(items, query), [items, query]);
 
-  // Función para encontrar coincidencias
-  function findMatch(items, query) {
-    const res = items.filter((i) => {
-      // Convertimos ambos a minúsculas para una búsqueda insensible a mayúsculas
-      return (
-        i.title.toLowerCase().indexOf(query.toLowerCase()) >= 0 &&
-        query.length > 0
-      );
-    });
+  useEffect(() => {
+    onResultsCalculated(results);
+  }, [results]);
 
-    // Actualizamos los resultados y notificamos los resultados calculados
+  function findMatch(items, query) {
+    const lowerCaseQuery = query.toLowerCase();
+    const res = items.filter(
+      (i) => i.title.toLowerCase().includes(lowerCaseQuery) && query.length > 0
+    );
+
     setResults(res);
-    onResultsCalculated(res);
     return res;
   }
 
   return (
     <ResultsContainer>
-      {/* Asegúrate de que no sea solo espacios vacíos */}
-      {query.trim() !== ""
-        ? filteredItems.map((item) => (
-            <MarkedItem
-              key={item.id}
-              item={item}
-              query={query}
-              onClick={onItemSelected}
-            />
-          ))
-        : ""}
+      {filteredItems.length > 0 ? (
+        filteredItems.map((item) => (
+          <MarkedItem
+            key={item.id}
+            item={item}
+            query={query}
+            onClick={onItemSelected}
+          />
+        ))
+      ) : (
+        <div>No results found</div>
+      )}
     </ResultsContainer>
   );
 }

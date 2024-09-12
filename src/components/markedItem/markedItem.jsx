@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import styled from "styled-components";
 
-//STYLED COMPONENTS//
+// STYLED COMPONENTS
 const StyledMarker = styled.span`
   background-color: yellow;
   font-weight: bolder;
@@ -26,15 +26,27 @@ const StyledItem = styled.a`
 
 export default function MarkedItem({ item, query, onClick }) {
   const { left, center, right } = useMemo(
-    () => getPositions(item, query),
+    () => getPositions(item.title, query),
     [item, query]
   );
 
-  function getPositions(item, query) {
-    const index = item.title.toLowerCase().indexOf(query);
-    const left = item.title.slice(0, index);
-    const right = item.title.slice(index + query.length);
-    const center = item.title.slice(index, index + query.length);
+  function getPositions(title, query) {
+    const lowerCaseTitle = title.toLowerCase();
+    const lowerCaseQuery = query.toLowerCase();
+    const index = lowerCaseTitle.indexOf(lowerCaseQuery);
+
+    // Return full title if query is not found
+    if (index === -1) {
+      return {
+        left: title,
+        center: "",
+        right: "",
+      };
+    }
+
+    const left = title.slice(0, index);
+    const center = title.slice(index, index + query.length);
+    const right = title.slice(index + query.length);
 
     return {
       left,
@@ -46,6 +58,7 @@ export default function MarkedItem({ item, query, onClick }) {
   function handleClick() {
     onClick(item);
   }
+
   return (
     <StyledItem onClick={handleClick}>
       {left}
