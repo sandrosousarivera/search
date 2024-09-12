@@ -65,7 +65,7 @@ Error generating stack: `+i.message+`
   margin-top: -3px;
   box-sizing: border-box;
   border-radius: 0 0 5px 5px;
-`;function Fm({items:e,onItemSelected:t,query:n,onResultsCalculated:r}){const[l,i]=fe.useState([]),o=fe.useMemo(()=>u(e,n),[e,n]);fe.useEffect(()=>{r(l)},[l]);function u(s,c){const m=c.toLowerCase(),h=s.filter(p=>p.title.toLowerCase().includes(m)&&c.length>0);return i(h),h}return Y.jsx(jm,{children:o.length>0?o.map(s=>Y.jsx(Mm,{item:s,query:n,onClick:t},s.id)):Y.jsx("div",{children:"No results found"})})}const Am=je.div`
+`;function Fm({items:e,onItemSelected:t,query:n,onResultsCalculated:r}){const[l,i]=fe.useState([]),o=fe.useMemo(()=>u(e,n),[e,n]);fe.useEffect(()=>{r(l)},[l]);function u(s,c){const m=c.toLowerCase(),h=s.filter(p=>p.title.toLowerCase().includes(m)&&c.length>0);return i(h),h}return Y.jsx(jm,{children:n.length>0&&o.length===0?Y.jsx("div",{children:"No results found"}):o.map(s=>Y.jsx(Mm,{item:s,query:n,onClick:t},s.id))})}const Am=je.div`
   position: relative;
   width: 400px;
   margin: 0 auto;
