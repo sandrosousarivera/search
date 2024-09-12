@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import MarkedItem from "../markedItem/markedItem";
 import styled from "styled-components";
 
-//STYLED COMPONENTS//
+// STYLED COMPONENTS
 const ResultsContainer = styled.div`
   position: absolute;
   width: 400px;
@@ -41,7 +41,9 @@ export default function Results({
 
   return (
     <ResultsContainer>
-      {filteredItems.length > 0 ? (
+      {query.length > 0 && filteredItems.length === 0 ? (
+        <div>No results found</div>
+      ) : (
         filteredItems.map((item) => (
           <MarkedItem
             key={item.id}
@@ -50,8 +52,6 @@ export default function Results({
             onClick={onItemSelected}
           />
         ))
-      ) : (
-        <div>No results found</div>
       )}
     </ResultsContainer>
   );
